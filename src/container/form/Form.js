@@ -11,6 +11,8 @@ export default class Form extends Component {
     // };
     this.state = {
       profile: [],
+      isusernameerror: null,
+      ispassworderror: null,
     };
   }
 
@@ -21,8 +23,24 @@ export default class Form extends Component {
     let password = event.target.elements.password.value;
     let password2 = event.target.elements.password2.value;
     // include API this place and setState POST
-    if(password === password2)
+    if (username === '' && username.length < 3)
     {
+      this.setState({
+        profile: [],
+        isusernameerror: "username contains atlast 3 charecters",
+      });
+    }
+    else if(password !== password2)
+    {
+      this.setState({
+        profile: [],
+        ispassworderror: "Your password doesn't matched"
+      })
+    } else {
+      // this.setState({
+      //   profile: [],
+      //   ispassworderror: "Your password doesn't matched"
+      // })
       this.setState({
         profile: [
           ...this.state.profile,
@@ -32,11 +50,9 @@ export default class Form extends Component {
             password: password,
           },
         ],
+        isusernameerror: null,
+        ispassworderror: null,
       });
-    } else {
-      this.setState({
-        profile: []
-      })
     }
 
     let agree = event.target.elements.agree.value;
@@ -75,6 +91,7 @@ export default class Form extends Component {
                   className="form-control"
                   id="username"
                 />
+                <h6 style={{ color: "red" }}>{this.state.isusernameerror}</h6>
               </div>
               <div className="form-group">
                 <label htmlFor="email1">Email address</label>
@@ -85,9 +102,6 @@ export default class Form extends Component {
                   id="email1"
                   aria-describedby="emailHelp"
                 />
-                <small id="emailHelp" className="form-text text-muted">
-                  We'll never share your email with anyone else.
-                </small>
               </div>
               <div className="form-group">
                 <label htmlFor="Password">Password</label>
@@ -96,7 +110,11 @@ export default class Form extends Component {
                   name="password"
                   className="form-control"
                   id="Password"
+                  aria-describedby="passHelp"
                 />
+                <small id="passHelp" className="form-text text-muted">
+                  We'll never share your password with anyone else.
+                </small>
               </div>
               <div className="form-group">
                 <label htmlFor="Password2">Repeat Password</label>
@@ -125,6 +143,7 @@ export default class Form extends Component {
             </form>
           </div>
         </div>
+        <h3 style={{ color: "red" }}>{this.state.ispassworderror}</h3>
         {/* comment out this line when show your value */}
         <List profile={this.state.profile} />
 
