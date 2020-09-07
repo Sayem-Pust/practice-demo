@@ -7,14 +7,18 @@ export default class List extends Component {
     return (
       <div className="cointainer">
         <div className="row">
-          <div className="col-md-6 offset-3 mt-5">
+          <div className="col-12 col-md-9 mt-5 table-responsive">
             <table className="table">
               <thead>
                 <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Username</th>
+                  <th scope="col">Id</th>
+                  <th scope="col">First Name</th>
+                  <th scope="col">Last Name</th>
+                  <th scope="col">Contact No.</th>
                   <th scope="col">Email</th>
-                  <th scope="col">Password</th>
+                  <th scope="col">May you contact?</th>
+                  <th scope="col">Contact Type</th>
+                  <th scope="col">Message</th>
                 </tr>
               </thead>
               <tbody>
@@ -22,13 +26,16 @@ export default class List extends Component {
                   return (
                     <tr key={index}>
                       <th scope="row"></th>
-                      <td>{item.username}</td>
+                      <td>{item.firstname}</td>
+                      <td>{item.lastname}</td>
+                      <td>{item.telnum}</td>
                       <td>{item.email}</td>
-                      <td>{item.password}</td>
+                      <td>{item.agree}</td>
+                      <td>{item.contactType}</td>
+                      <td>{item.message}</td>
                     </tr>
                   );
                 })}
-                
               </tbody>
             </table>
           </div>

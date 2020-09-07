@@ -1,9 +1,18 @@
 import React, { Component } from "react";
+import {
+  Button,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  Col,
+  FormFeedback,
+} from "reactstrap";
 import List from "../../component/list/List";
 
-export default class Form extends Component {
-  constructor() {
-    super();
+export default class ContactForm extends Component {
+  constructor(props) {
+    super(props);
     // this.state = {
     //   username: "",
     //   email: "",
@@ -11,147 +20,248 @@ export default class Form extends Component {
     // };
     this.state = {
       profile: [],
-      isUsernameError: null,
-      isPasswordError: null,
+      firstname: "",
+      lastname: "",
+      telnum: "",
+      email: "",
+      agree: false,
+      contactType: "Tel.",
+      message: "",
+      touched: {
+        firstname: false,
+        lastname: false,
+        telnum: false,
+        email: false,
+      },
     };
   }
 
-  handleSubmit = (event) => {
-    event.preventDefault();
-    let username = event.target.elements.username.value;
-    let email = event.target.elements.email.value;
-    let password = event.target.elements.password.value;
-    let password2 = event.target.elements.password2.value;
-    // include API this place and setState POST
-    if (username === '' && username.length < 3)
-    {
-      this.setState({
-        profile: [],
-        isUsernameError: "username contains atlast 3 charecters",
-      });
-    }
-    else if(password !== password2)
-    {
-      this.setState({
-        profile: [],
-        isPasswordError: "Your password doesn't matched"
-      })
-    } else {
-      // this.setState({
-      //   profile: [],
-      //   ispassworderror: "Your password doesn't matched"
-      // })
-      this.setState({
-        profile: [
-          ...this.state.profile,
-          {
-            username: username,
-            email: email,
-            password: password,
-          },
-        ],
-        isUsernameError: null,
-        isPasswordError: null,
-      });
-    }
-
-    // let agree = event.target.elements.agree.value;
-    // console.log(username, email, password, agree);
-    // this.setState({
-    //   username: username,
-    //   email: email,
-    //   password: password,
-    // });
-
-    
+  handleBlur = (field) => (evt) => {
+    this.setState({
+      touched: { ...this.state.touched, [field]: true },
+    });
   };
 
-  // handleChange(e) {
-  //   let isChecked = e.target.checked;
-  //   console.log(isChecked)
-  //   if (isChecked === false)
-  //   {
-  //     this.setState({
-  //       profile: []
-  //     })
-  //   }
-  // }
+  handleInputChange = (event) => {
+    const target = event.target;
+    console.log(target);
+    const value = target.type === "checkbox" ? target.checked : target.value;
+    console.log(value);
+    const name = target.name;
+
+    // this.setState({
+    //   profile: [
+    //     ...this.state.profile,
+    //     {
+    //       [name]: value,
+    //     },
+    //   ],
+    // });
+
+    this.setState({
+      [name]: value,
+    });
+  };
+
+  handleSubmit = (event) => {
+    console.log("Current State is: " + JSON.stringify(this.state));
+    alert("Current State is: " + JSON.stringify(this.state));
+    event.preventDefault();
+    this.setState({
+      profile: [
+        ...this.state.profile,
+        {
+          firstname: this.state.firstname,
+          lastname: this.state.lastname,
+          telnum: this.state.telnum,
+          email: this.state.email,
+          agree: this.state.agree,
+          contactType: this.state.contactType,
+          message: this.state.message,
+        },
+      ],
+    });
+  };
+
+  validate(firstname, lastname, telnum, email) {
+        const errors = {
+            firstname: '',
+            lastname: '',
+            telnum: '',
+            email: ''
+        };
+
+        if (this.state.touched.firstname && firstname.length < 3)
+            errors.firstname = 'First Name should be >= 3 characters';
+        else if (this.state.touched.firstname && firstname.length > 30)
+            errors.firstname = 'First Name should be <= 30 characters';
+
+        if (this.state.touched.lastname && lastname.length < 3)
+            errors.lastname = 'Last Name should be >= 3 characters';
+        else if (this.state.touched.lastname && lastname.length > 30)
+            errors.lastname = 'Last Name should be <= 30 characters';
+
+        const reg = /^\d+$/;
+        if (this.state.touched.telnum && !reg.test(telnum))
+            errors.telnum = 'Tel. Number should contain only numbers';
+
+        if(this.state.touched.email && email.split('').filter(x => x === '@').length !== 1)
+            errors.email = 'Email should contain a @';
+
+        return errors;
+    }
 
   render() {
+    const errors = this.validate(
+      this.state.firstname,
+      this.state.lastname,
+      this.state.telnum,
+      this.state.email
+    );
     return (
       <div className="container">
-        <div className="row">
-          <div className="col-md-6 offset-3 mt-5">
-            <form onSubmit={this.handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="username">Username</label>
-                <input
+        <div className="col-12 col-md-9 mt-5">
+          <Form onSubmit={this.handleSubmit}>
+            <FormGroup row>
+              <Label htmlFor="firstname" md={2}>
+                First Name
+              </Label>
+              <Col md={10}>
+                <Input
                   type="text"
-                  name="username"
-                  className="form-control"
-                  id="username"
+                  id="firstname"
+                  name="firstname"
+                  placeholder="First Name"
+                  value={this.state.firstname}
+                  valid={errors.firstname === ""}
+                  invalid={errors.firstname !== ""}
+                  onBlur={this.handleBlur("firstname")}
+                  onChange={this.handleInputChange}
                 />
-                <h6 style={{ color: "red" }}>{this.state.isUsernameError}</h6>
-              </div>
-              <div className="form-group">
-                <label htmlFor="email1">Email address</label>
-                <input
+                <FormFeedback>{errors.firstname}</FormFeedback>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label htmlFor="lastname" md={2}>
+                Last Name
+              </Label>
+              <Col md={10}>
+                <Input
+                  type="text"
+                  id="lastname"
+                  name="lastname"
+                  placeholder="Last Name"
+                  value={this.state.lastname}
+                  valid={errors.lastname === ""}
+                  invalid={errors.lastname !== ""}
+                  onBlur={this.handleBlur("lastname")}
+                  onChange={this.handleInputChange}
+                />
+                <FormFeedback>{errors.lastname}</FormFeedback>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label htmlFor="telnum" md={2}>
+                Contact Tel.
+              </Label>
+              <Col md={10}>
+                <Input
+                  type="tel"
+                  id="telnum"
+                  name="telnum"
+                  placeholder="Tel. number"
+                  value={this.state.telnum}
+                  valid={errors.telnum === ""}
+                  invalid={errors.telnum !== ""}
+                  onBlur={this.handleBlur("telnum")}
+                  onChange={this.handleInputChange}
+                />
+                <FormFeedback>{errors.telnum}</FormFeedback>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label htmlFor="email" md={2}>
+                Email
+              </Label>
+              <Col md={10}>
+                <Input
                   type="email"
+                  id="email"
                   name="email"
-                  className="form-control"
-                  id="email1"
-                  aria-describedby="emailHelp"
+                  placeholder="Email"
+                  value={this.state.email}
+                  valid={errors.email === ""}
+                  invalid={errors.email !== ""}
+                  onBlur={this.handleBlur("email")}
+                  onChange={this.handleInputChange}
                 />
-              </div>
-              <div className="form-group">
-                <label htmlFor="Password">Password</label>
-                <input
-                  type="password"
-                  name="password"
-                  className="form-control"
-                  id="Password"
-                  aria-describedby="passHelp"
-                />
-                <small id="passHelp" className="form-text text-muted">
-                  We'll never share your password with anyone else.
-                </small>
-              </div>
-              <div className="form-group">
-                <label htmlFor="Password2">Repeat Password</label>
-                <input
-                  type="password"
-                  name="password2"
-                  className="form-control"
-                  id="Password2"
-                />
-              </div>
-              <div className="form-group form-check">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  id="exampleCheck1"
-                  name="agree"
-                  // onChange={(e) => this.handleChange(e)}
-                />
-                <label className="form-check-label" htmlFor="exampleCheck1">
-                  Check me out
-                </label>
-              </div>
-              <button type="submit" className="btn btn-primary">
-                Submit
-              </button>
-            </form>
-          </div>
+                <FormFeedback>{errors.email}</FormFeedback>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Col md={{ size: 6, offset: 2 }}>
+                <FormGroup check>
+                  <Label check>
+                    <Input
+                      type="checkbox"
+                      name="agree"
+                      checked={this.state.agree}
+                      onChange={this.handleInputChange}
+                    />{" "}
+                    <strong>May we contact you?</strong>
+                  </Label>
+                </FormGroup>
+              </Col>
+              <Col md={{ size: 3, offset: 1 }}>
+                <Input
+                  type="select"
+                  name="contactType"
+                  value={this.state.contactType}
+                  onChange={this.handleInputChange}
+                >
+                  <option>Tel.</option>
+                  <option>Email</option>
+                </Input>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label htmlFor="message" md={2}>
+                Your Feedback
+              </Label>
+              <Col md={10}>
+                <Input
+                  type="textarea"
+                  id="message"
+                  name="message"
+                  rows="12"
+                  value={this.state.message}
+                  onChange={this.handleInputChange}
+                ></Input>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Col md={{ size: 10, offset: 2 }}>
+                {errors.firstname === "" &&
+                errors.lastname === "" &&
+                errors.email === "" &&
+                errors.telnum === "" ? (
+                  <Button type="submit" color="primary">
+                    Send Feedback
+                  </Button>
+                ) : (
+                  <Button disabled type="submit" color="primary">
+                    Send Feedback
+                  </Button>
+                )}
+                {/* <Button type="submit" color="primary">
+                  Send Feedback
+                </Button> */}
+              </Col>
+            </FormGroup>
+          </Form>
         </div>
-        <h3 style={{ color: "red" }}>{this.state.isPasswordError}</h3>
         {/* comment out this line when show your value */}
         <List profile={this.state.profile} />
-
-        {/* {
-          this.state.profile.map(item => {
-            return <List username={item.username} />
-          })
-        } */}
       </div>
     );
   }
