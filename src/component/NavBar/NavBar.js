@@ -6,7 +6,7 @@ export default class NavBar extends Component {
       <div>
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
           <a className="navbar-brand" href="/">
-            Navbar
+            Profile Recorder
           </a>
           <button
             className="navbar-toggler"

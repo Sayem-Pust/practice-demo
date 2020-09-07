@@ -11,8 +11,8 @@ export default class Form extends Component {
     // };
     this.state = {
       profile: [],
-      isusernameerror: null,
-      ispassworderror: null,
+      isUsernameError: null,
+      isPasswordError: null,
     };
   }
 
@@ -27,14 +27,14 @@ export default class Form extends Component {
     {
       this.setState({
         profile: [],
-        isusernameerror: "username contains atlast 3 charecters",
+        isUsernameError: "username contains atlast 3 charecters",
       });
     }
     else if(password !== password2)
     {
       this.setState({
         profile: [],
-        ispassworderror: "Your password doesn't matched"
+        isPasswordError: "Your password doesn't matched"
       })
     } else {
       // this.setState({
@@ -50,13 +50,13 @@ export default class Form extends Component {
             password: password,
           },
         ],
-        isusernameerror: null,
-        ispassworderror: null,
+        isUsernameError: null,
+        isPasswordError: null,
       });
     }
 
-    let agree = event.target.elements.agree.value;
-    console.log(username, email, password, agree);
+    // let agree = event.target.elements.agree.value;
+    // console.log(username, email, password, agree);
     // this.setState({
     //   username: username,
     //   email: email,
@@ -91,7 +91,7 @@ export default class Form extends Component {
                   className="form-control"
                   id="username"
                 />
-                <h6 style={{ color: "red" }}>{this.state.isusernameerror}</h6>
+                <h6 style={{ color: "red" }}>{this.state.isUsernameError}</h6>
               </div>
               <div className="form-group">
                 <label htmlFor="email1">Email address</label>
@@ -143,7 +143,7 @@ export default class Form extends Component {
             </form>
           </div>
         </div>
-        <h3 style={{ color: "red" }}>{this.state.ispassworderror}</h3>
+        <h3 style={{ color: "red" }}>{this.state.isPasswordError}</h3>
         {/* comment out this line when show your value */}
         <List profile={this.state.profile} />
 
