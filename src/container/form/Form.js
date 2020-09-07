@@ -118,6 +118,7 @@ export default class ContactForm extends Component {
       this.state.telnum,
       this.state.email
     );
+    console.log('dsd' + this.state.agree)
     return (
       <div className="container">
         <div className="col-12 col-md-9 mt-5">
@@ -260,6 +261,7 @@ export default class ContactForm extends Component {
             </FormGroup>
           </Form>
         </div>
+        
         {/* comment out this line when show your value */}
         <List profile={this.state.profile} />
       </div>

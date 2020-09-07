@@ -4,6 +4,7 @@ import React, { Component } from 'react'
 export default class List extends Component {
   // using componentDidMount you can get value from API and Assign the  tbody
   render() {
+    console.log('list', this.props.profile)
     return (
       <div className="cointainer">
         <div className="row">
@@ -30,7 +31,7 @@ export default class List extends Component {
                       <td>{item.lastname}</td>
                       <td>{item.telnum}</td>
                       <td>{item.email}</td>
-                      <td>{item.agree}</td>
+                      <td>{String(item.agree)}</td>
                       <td>{item.contactType}</td>
                       <td>{item.message}</td>
                     </tr>
